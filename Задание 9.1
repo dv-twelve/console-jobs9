@@ -1,0 +1,58 @@
+using System;
+using System.IO;
+
+namespace ConsoleApp9_c_1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            { 
+                try
+                {
+                    Console.Write("\n\tВведите n число: ");
+                    
+                    int n = int.Parse(Console.ReadLine());
+
+
+                    byte[] values=new byte[n*8];
+
+                    for (int i = 1; i < n+1; i++)
+                    {
+                        Array.Copy(BitConverter.GetBytes( 1 / (double)i),0,values,(i-1)*8,8);
+                    }
+
+                    Console.Write("\n\tВведите путь к файлу (like D:/fileName.bin): ");
+                    
+                    string path = Console.ReadLine();
+
+                    FileStream fS= File.Create(path);
+                    fS.Write(values, 0, values.Length);
+                    fS.Close();
+
+                    byte[]readenData= File.ReadAllBytes(path);
+
+                    double[] readenValues = new double[n];
+
+                    for (int i = 0; i < n; i++)
+                    {
+                        readenValues[i] = BitConverter.ToDouble(readenData, i * 8);
+                    }
+
+                    for (int i = 0; i < n; i++)
+                    {
+                        Console.WriteLine(readenValues[i]);
+                    }
+
+                    break;
+                }
+                catch
+                {
+                    Console.Write("Ошибка, попробуйте снова");
+                }
+            }
+            Console.ReadLine();
+        }
+    }
+}
